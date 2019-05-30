@@ -49,6 +49,7 @@ namespace App.Services.Authentication
       return token = res.AccessToken;
     }
   }
+
   public static class AuthExtensions
   {
     public static void AddManagementApiClient(this IServiceCollection services, IConfiguration config)
@@ -68,7 +69,7 @@ namespace App.Services.Authentication
         var token = resolver.ResolveAsync()
                             .GetAwaiter()
                             .GetResult();
-        return new ManagementApiClient(token, $"domain/api/v2");
+        return new ManagementApiClient(token, new Uri($"{domain}/api/v2"));
       });
     }
     public static AuthenticationBuilder AddAuth0OpenIdConnect(this AuthenticationBuilder builder, IConfiguration config)
