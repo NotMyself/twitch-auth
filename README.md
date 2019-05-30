@@ -51,6 +51,7 @@ Then, Create a **Custom Social Connection** for Twitch in Auth0.
 1. Enable the Twitch connection.
 1. Supply your Twitch application credentials.
 1. Ensure the **Twitch Authentication** application is allowed to use this connection on the **Apps** tab.
+1. Ensure authentication works, by clicking the **try** button.
 
 Next, you will need to create another new Application to be used to access the Auth0 Management API.
 
