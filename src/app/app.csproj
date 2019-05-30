@@ -8,6 +8,8 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Auth0.AuthenticationApi" Version="6.2.0" />
+    <PackageReference Include="Auth0.ManagementApi" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>

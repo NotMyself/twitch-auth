@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using app.Models;
+using App.Models;
 
-namespace app.Controllers
+namespace App.Controllers
 {
   public class HomeController : Controller
   {
