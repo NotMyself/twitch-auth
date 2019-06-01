@@ -27,8 +27,6 @@ namespace App
         options.MinimumSameSitePolicy = SameSiteMode.None;
       });
 
-      services.AddManagementApiClient(Configuration);
-
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
