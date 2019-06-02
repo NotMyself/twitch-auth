@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using app.Models;
 
-namespace app.Controllers
+using Microsoft.AspNetCore.Mvc;
+
+using App.Models;
+
+namespace App.Controllers
 {
   public class HomeController : Controller
   {
