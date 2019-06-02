@@ -17,7 +17,6 @@ namespace App.Services.Authentication
       var domain = $"https://{config["AUTH0_DOMAIN"]}";
       var clientId = config["AUTH0_CLIENT_ID"];
       var clientSecret = config["AUTH0_CLIENT_SECRET"];
-      var logoutUri = $"https://{config["AUTH0_DOMAIN"]}/v2/logout?client_id={config["AUTH0_CLIENT_ID"]}";
 
       return builder.AddOpenIdConnect("Auth0", options =>
       {
@@ -58,6 +57,7 @@ namespace App.Services.Authentication
           // handle the logout redirection
           OnRedirectToIdentityProviderForSignOut = (context) =>
            {
+             var logoutUri = $"https://{config["AUTH0_DOMAIN"]}/v2/logout?client_id={config["AUTH0_CLIENT_ID"]}";
              var postLogoutUri = context.Properties.RedirectUri;
              if (!string.IsNullOrEmpty(postLogoutUri))
              {
