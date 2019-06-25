@@ -37,7 +37,9 @@ namespace App.Controllers
     {
       var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
       var connections = User.Claims.FirstOrDefault(c => c.Type == "https://iamnotmyself.com/connections").Value;
-      var token = await HttpContext.GetTokenAsync("id_token");
+      var idToken = await HttpContext.GetTokenAsync("id_token");
+      var accessToken = await HttpContext.GetTokenAsync("access_token");
+
       return View(new UserProfileViewModel()
       {
         Name = User.Identity.Name,

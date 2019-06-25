@@ -33,15 +33,20 @@ namespace App.Services.Authentication
         // Configure the scope
         options.Scope.Clear();
         options.Scope.Add("openid");
+
+        //for adding profile
         options.Scope.Add("profile");
         options.Scope.Add("email");
+        //for adding idps
         options.Scope.Add("https://iamnotmyself.com/connections");
 
+        //for adding profile
         options.TokenValidationParameters = new TokenValidationParameters
         {
           NameClaimType = "name"
         };
 
+        //for adding profile
         options.GetClaimsFromUserInfoEndpoint = true;
 
         // Set the callback path, so Auth0 will call back to http://localhost:3000/callback
@@ -50,31 +55,41 @@ namespace App.Services.Authentication
 
         // Configure the Claims Issuer to be Auth0
         options.ClaimsIssuer = "Auth0";
+
+        //for adding profile
         options.SaveTokens = true;
 
         options.Events = new OpenIdConnectEvents
         {
+          OnRedirectToIdentityProvider = context =>
+          {
+            context.ProtocolMessage.SetParameter("audience", "https://iamnotmyself.com/admin");
+
+            return Task.FromResult(0);
+          },
+
           // handle the logout redirection
           OnRedirectToIdentityProviderForSignOut = (context) =>
-           {
-             var logoutUri = $"https://{config["AUTH0_DOMAIN"]}/v2/logout?client_id={config["AUTH0_CLIENT_ID"]}";
-             var postLogoutUri = context.Properties.RedirectUri;
-             if (!string.IsNullOrEmpty(postLogoutUri))
-             {
-               if (postLogoutUri.StartsWith("/"))
-               {
-                 // transform to absolute
-                 var request = context.Request;
-                 postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
-               }
-               logoutUri += $"&returnTo={ Uri.EscapeDataString(postLogoutUri)}";
-             }
+          {
+            var logoutUri = $"https://{config["AUTH0_DOMAIN"]}/v2/logout?client_id={config["AUTH0_CLIENT_ID"]}";
+            var postLogoutUri = context.Properties.RedirectUri;
 
-             context.Response.Redirect(logoutUri);
-             context.HandleResponse();
+            if (!string.IsNullOrEmpty(postLogoutUri))
+            {
+              if (postLogoutUri.StartsWith("/"))
+              {
+                // transform to absolute
+                var request = context.Request;
+                postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+              }
+              logoutUri += $"&returnTo={ Uri.EscapeDataString(postLogoutUri)}";
+            }
 
-             return Task.CompletedTask;
-           }
+            context.Response.Redirect(logoutUri);
+            context.HandleResponse();
+
+            return Task.CompletedTask;
+          }
         };
       });
     }
