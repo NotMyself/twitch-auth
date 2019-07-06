@@ -36,6 +36,8 @@ namespace App
       .AddCookie()
       .AddAuth0OpenIdConnect(Configuration);
 
+      services.AddAuth0Authorization();
+
       services.AddMvc()
         .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
     }

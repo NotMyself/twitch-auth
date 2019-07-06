@@ -12,6 +12,16 @@ namespace App.Services.Authentication
 {
   public static class AuthExtensions
   {
+
+    public static IServiceCollection AddAuth0Authorization(this IServiceCollection services) {
+
+      services.AddAuthorization(a => {
+        a.AddPolicy("Admin", p => p.RequireRole("Admin"));
+        a.AddPolicy("User", p => p.RequireRole("User"));
+      });
+
+      return services;
+    }
     public static AuthenticationBuilder AddAuth0OpenIdConnect(this AuthenticationBuilder builder, IConfiguration config)
     {
       var domain = $"https://{config["AUTH0_DOMAIN"]}";
@@ -40,10 +50,11 @@ namespace App.Services.Authentication
         //for adding idps
         options.Scope.Add("https://iamnotmyself.com/connections");
 
-        //for adding profile
+        //for adding profile and roles
         options.TokenValidationParameters = new TokenValidationParameters
         {
-          NameClaimType = "name"
+          NameClaimType = "name",
+          RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/roles"
         };
 
         //for adding profile
@@ -61,13 +72,6 @@ namespace App.Services.Authentication
 
         options.Events = new OpenIdConnectEvents
         {
-          OnRedirectToIdentityProvider = context =>
-          {
-            context.ProtocolMessage.SetParameter("audience", "https://iamnotmyself.com/admin");
-
-            return Task.FromResult(0);
-          },
-
           // handle the logout redirection
           OnRedirectToIdentityProviderForSignOut = (context) =>
           {

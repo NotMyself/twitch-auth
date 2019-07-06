@@ -47,5 +47,21 @@ namespace App.Controllers
         ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
       });
     }
+
+    [Authorize("Admin")]
+    public async Task<IActionResult> Profile2()
+    {
+      var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+      var connections = User.Claims.FirstOrDefault(c => c.Type == "https://iamnotmyself.com/connections").Value;
+      var idToken = await HttpContext.GetTokenAsync("id_token");
+      var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+      return View("Profile", new UserProfileViewModel()
+      {
+        Name = User.Identity.Name,
+        EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+        ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+      });
+    }
   }
 }
